@@ -7,10 +7,10 @@ const countries = ref([] as string[])
 const imgWidth = ref(250)
 
 function zoomOut() {
-	imgWidth.value = imgWidth.value - 10 || 0
+	imgWidth.value = imgWidth.value - 100 || 0
 }
 function zoomIn() {
-	imgWidth.value = imgWidth.value + 10 || 100
+	imgWidth.value = imgWidth.value + 100 || 100
 }
 </script>
 
@@ -31,10 +31,16 @@ function zoomIn() {
 					variant="outlined"
 				></v-autocomplete>
 				<div class="d-flex flex-wrap">
-					<v-card v-for="code in countries" :elevation="5" class="d-flex flex-column">
+					<v-card
+						v-for="code in countries"
+						:elevation="5"
+						class="d-flex flex-column"
+						:rounded="0"
+						hover
+					>
 						<v-img
 							:width="imgWidth"
-							:src="`/flags/png250px/${code.toLowerCase()}.png`"
+							:src="`/flags/png1000px/${code.toLowerCase()}.png`"
 							:alt="code"
 						/>
 						<p class="align-self-center">{{ code }}</p>
@@ -42,24 +48,32 @@ function zoomIn() {
 				</div>
 			</v-col>
 		</v-row>
-		<v-card :elevation="2" class="float-bottom">
-			<v-slider
-				v-model="imgWidth"
-				:min="10"
-				:max="1000"
-				append-icon="mdi-magnify-plus-outline"
-				prepend-icon="mdi-magnify-minus-outline"
-				@click:append="zoomIn"
-				@click:prepend="zoomOut"
-			></v-slider>
-		</v-card>
+		<v-row>
+			<v-col :cols="4">
+				<v-card :elevation="2" class="float-bottom">
+					<v-slider
+						class="mt-4 mb-0 mp-0"
+						v-model="imgWidth"
+						:min="10"
+						:max="1000"
+						append-icon="mdi-magnify-plus-outline"
+						prepend-icon="mdi-magnify-minus-outline"
+						@click:append="zoomIn"
+						@click:prepend="zoomOut"
+					></v-slider>
+				</v-card>
+			</v-col>
+		</v-row>
 	</v-container>
 </template>
 
 <style>
 .float-bottom {
 	position: fixed;
-	width: 95%;
+	max-width: 95%; /* Limits the maximum width to the viewport width */
+	width: 700px; /* Allows the element to shrink to its content width */
+	left: 50%; /* Center horizontally */
+	transform: translateX(-50%); /* Center horizontally */
 	bottom: 30px;
 }
 </style>
