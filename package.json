@@ -1,23 +1,27 @@
 {
-  "name": "nuxt-app",
-  "devDependencies": {
-    "@nuxt/devtools": "latest",
-    "nuxt": "^3.7.3"
-  },
-  "private": true,
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "type": "module",
-  "dependencies": {
-    "@invictus.codes/nuxt-vuetify": "^0.3.0",
-    "@mdi/font": "^7.2.96",
-    "flag-icons": "^6.11.1",
-    "vue-country-flag-next": "^2.3.2",
-    "vuetify": "^3.3.17"
-  }
+	"name": "nuxt-app",
+	"devDependencies": {
+		"@nuxt/devtools": "latest",
+		"bun-types": "^1.0.5-canary.20231007T140129",
+		"nuxt": "^3.7.3"
+	},
+	"private": true,
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare"
+	},
+	"type": "module",
+	"dependencies": {
+		"@formkit/auto-animate": "^0.8.0",
+		"@invictus.codes/nuxt-vuetify": "^0.3.0",
+		"@mdi/font": "^7.2.96",
+		"@vueuse/nuxt": "^10.5.0",
+		"flag-icons": "^6.11.1",
+		"vue-country-flag-next": "^2.3.2",
+		"vuedraggable": "next",
+		"vuetify": "^3.3.17"
+	}
 }
