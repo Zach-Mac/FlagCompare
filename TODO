@@ -1,3 +1,4 @@
+remove url params when empty
 remove typed letters after selection
 reorder photos. draggable chips?
 responsive. flags right under autocomplete, move down when autocomplete open

@@ -8,6 +8,10 @@ interface Country {
 	name: string
 }
 
+const { width: screenWidth } = useWindowSize()
+const imgMaxHeight = computed(() => screenWidth.value / 1.5)
+const imgMinHeight = 25
+
 const params = useUrlSearchParams('history')
 
 const selectedCountries = ref([] as Country[])
@@ -25,24 +29,68 @@ watch(selectedCountries, value => {
 	params.countries = value.map(obj => obj.code).join('-')
 })
 
-const imgHeight = ref(250)
+const imgHeight = ref(imgMaxHeight.value / 4)
 
 function zoomOut() {
-	imgHeight.value = imgHeight.value - 100 || 0
+	imgHeight.value = imgHeight.value - imgMaxHeight.value / 10 || 0
 }
 function zoomIn() {
-	imgHeight.value = imgHeight.value + 100 || 100
+	imgHeight.value = imgHeight.value + imgMaxHeight.value / 10 || 100
 }
 
 const img = ref<VImg[]>([])
+
+const flagsCol = ref(null)
+const { width: flagsColWidth, height: flagsColHeight } = useElementSize(flagsCol)
+
+function getHeight(index: number) {
+	// const width = Number(img.value[index]?.image?.width) ?? 1
+	// let maxWidth = flagsColWidth.value - 8
+	// if (maxWidth < 0) maxWidth = 100000
+
+	// console.log('maxWidth', maxWidth, width)
+
+	// if (width > maxWidth) {
+	// 	const natWidth = img.value[index]?.naturalWidth ?? 1
+	// 	const natHeight = img.value[index]?.naturalHeight ?? 1
+
+	// 	const maxHeight = (natHeight / natWidth) * maxWidth
+	// 	console.log('maxHeight', maxHeight)
+	// 	return maxHeight
+	// }
+
+	return imgHeight.value
+
+	// const natWidth = img.value[index]?.naturalWidth ?? 1
+	// const natHeight = img.value[index]?.naturalHeight ?? 1
+	// const height = Number(img.value[index]?.height) ?? 1
+	// const width = Number(img.value[index]?.image?.width) ?? 1
+
+	// if (index == 0) {
+	// 	console.log('natWidth, natHeight, width, height', natWidth, natHeight, width, height)
+	// 	console.log('natWidth / natHeight', natWidth / natHeight)
+	// 	console.log('width / height', width / height)
+	// 	console.log('img.value[index]', img.value[index]?.image?.width / height ?? 0)
+
+	// 	console.log('1', width / height + 0.1, natWidth / natHeight)
+	// }
+
+	// // return imgHeight.value
+
+	// // if ratio ok, return imgHeight
+	// if (width / height + 0.1 > natWidth / natHeight) return imgHeight.value
+
+	// // else return height as func of width
+	// return (natHeight / natWidth) * width
+}
 
 function getWidth(index: number) {
 	// w = nw/nh * h
 	const natWidth = img.value[index]?.naturalWidth ?? 1
 	const natHeight = img.value[index]?.naturalHeight ?? 1
-	const height = img.value[index]?.height ?? 1
+	const height = Number(img.value[index]?.height) ?? 1
 
-	const width = (natWidth / natHeight) * Number(height)
+	const width = (natWidth / natHeight) * height
 	return width
 }
 
@@ -58,9 +106,9 @@ const reorderMode = ref(false)
 </script>
 
 <template>
-	<v-container class="h-screen">
+	<v-container fluid class="h-screen">
 		<v-row>
-			<v-col>
+			<v-col cols="12" sm="10">
 				<v-autocomplete
 					v-auto-animate
 					v-model="selectedCountries"
@@ -75,17 +123,15 @@ const reorderMode = ref(false)
 					item-title="name"
 					item-value="code"
 					variant="outlined"
+					hide-details
 				>
-					<template #append>
-						<v-btn
-							@click="reorderMode = !reorderMode"
-							:variant="reorderMode ? 'outlined' : 'elevated'"
-							>Reorder</v-btn
-						>
-					</template>
 				</v-autocomplete>
-
+			</v-col>
+		</v-row>
+		<v-row>
+			<v-col ref="flagsCol">
 				<div class="d-flex flex-wrap">
+					<!-- normal mode -->
 					<v-card
 						v-if="!reorderMode"
 						v-for="(country, index) in selectedCountries"
@@ -97,7 +143,7 @@ const reorderMode = ref(false)
 						<v-img
 							class="elevation-5"
 							:ref="el => (img[index] = el)"
-							:height="imgHeight"
+							:height="getHeight(index)"
 							:width="getWidth(index)"
 							:src="`/flags/png1000px/${country.code.toLowerCase()}.png`"
 							:alt="country.name"
@@ -105,6 +151,7 @@ const reorderMode = ref(false)
 						<p class="align-self-center">{{ country.name }}</p>
 					</v-card>
 
+					<!-- reorder mode -->
 					<draggable
 						v-else
 						v-model="selectedCountries"
@@ -112,19 +159,26 @@ const reorderMode = ref(false)
 						v-bind="dragOptions"
 					>
 						<template #item="{ element }">
-							<v-card
-								:elevation="5"
-								class="d-flex flex-column ma-1"
-								:rounded="0"
-								hover
-							>
-								<v-img
-									class="elevation-5"
-									:width="100"
-									:src="`/flags/png100px/${element.code.toLowerCase()}.png`"
-									:alt="element.name"
-								/>
-								<p class="align-self-center">{{ element.name }}</p>
+							<v-card :elevation="5" class="ma-1" :rounded="0" hover>
+								<v-row align="center">
+									<v-col>
+										<v-card :rounded="0">
+											<v-img
+												class="elevation-5"
+												:width="100"
+												:src="`/flags/png100px/${element.code.toLowerCase()}.png`"
+												:alt="element.name"
+											/>
+
+											<p class="text-center">
+												{{ element.name }}
+											</p>
+										</v-card>
+									</v-col>
+									<v-col cols="auto">
+										<v-icon icon="mdi-reorder-horizontal" class="pr-4"></v-icon>
+									</v-col>
+								</v-row>
 							</v-card>
 						</template>
 					</draggable>
@@ -132,18 +186,42 @@ const reorderMode = ref(false)
 			</v-col>
 		</v-row>
 
-		<v-card :elevation="2" class="float-bottom">
-			<v-slider
-				class="mt-4 mb-0 mp-0"
-				v-model="imgHeight"
-				:min="10"
-				:max="500"
-				append-icon="mdi-magnify-plus-outline"
-				prepend-icon="mdi-magnify-minus-outline"
-				@click:append="zoomIn"
-				@click:prepend="zoomOut"
-			></v-slider>
-		</v-card>
+		<!-- toolbar -->
+		<v-container class="float-bottom">
+			<v-card :elevation="10" class="pa-2">
+				<v-row align="center" justify="space-between">
+					<v-col class="pa-1 pr-0">
+						<v-slider
+							:disabled="reorderMode"
+							class="ma-2"
+							v-model="imgHeight"
+							:min="imgMinHeight"
+							:max="imgMaxHeight"
+							append-icon="mdi-magnify-plus-outline"
+							prepend-icon="mdi-magnify-minus-outline"
+							@click:append="zoomIn"
+							@click:prepend="zoomOut"
+							hide-details
+						></v-slider>
+					</v-col>
+					<v-col cols="auto" class="pa-1 pl-0">
+						<v-tooltip text="Reorder" location="top">
+							<template v-slot:activator="{ props }">
+								<v-btn
+									density="comfortable"
+									v-bind="props"
+									class="ma-2"
+									@click="reorderMode = !reorderMode"
+									:variant="reorderMode ? 'tonal' : 'elevated'"
+									icon="mdi-reorder-horizontal"
+								>
+								</v-btn>
+							</template>
+						</v-tooltip>
+					</v-col>
+				</v-row>
+			</v-card>
+		</v-container>
 	</v-container>
 </template>
 
