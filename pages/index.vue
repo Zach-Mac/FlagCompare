@@ -108,7 +108,7 @@ const reorderMode = ref(false)
 <template>
 	<v-container fluid class="h-screen">
 		<v-row>
-			<v-col cols="12" sm="10">
+			<v-col>
 				<v-autocomplete
 					v-auto-animate
 					v-model="selectedCountries"
