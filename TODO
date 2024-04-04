@@ -6,3 +6,5 @@ responsive. flags right under autocomplete, move down when autocomplete open
 country names shorten and add a ... when flag width < cardwidth
 
 go back in history not working with param changes...
+
+save settings in localstorage

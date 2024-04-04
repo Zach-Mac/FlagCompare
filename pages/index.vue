@@ -17,7 +17,10 @@ function getCountries(countriesParam: string) {
 	}))
 }
 
-const drawer = ref(false)
+const showNavDrawer = ref(false)
+const showSettingsDrawer = ref(false)
+
+const showNameTooltips = ref(true)
 
 const { width: screenWidth } = useWindowSize()
 const imgMaxHeight = computed(() => screenWidth.value / 1.5)
@@ -34,7 +37,6 @@ watch(selectedCountries, value => {
 })
 
 const imgHeight = ref(imgMaxHeight.value / 4)
-
 function zoomOut() {
 	imgHeight.value = imgHeight.value - imgMaxHeight.value / 10 || 0
 }
@@ -47,7 +49,6 @@ const vImgRefs = ref<VImg[]>([])
 function getHeight() {
 	return imgHeight.value
 }
-
 function getWidth(index: number) {
 	// w = nw/nh * h
 	const natWidth = vImgRefs.value[index]?.naturalWidth ?? 1
@@ -67,6 +68,14 @@ const dragOptions = computed(() => ({
 }))
 
 const reorderMode = ref(false)
+
+const pRefs = ref([] as HTMLParagraphElement[])
+
+function needsTruncate(index: number) {
+	if (!pRefs.value[index]) return false
+
+	return pRefs.value[index].scrollWidth > getWidth(index)
+}
 </script>
 
 <template>
@@ -74,20 +83,24 @@ const reorderMode = ref(false)
 		<v-app-bar rounded>
 			<template v-slot:prepend>
 				<v-app-bar-nav-icon
-					@click.stop="drawer = !drawer"
-					:active="drawer"
+					@click.stop="showNavDrawer = !showNavDrawer"
+					:active="showNavDrawer"
 				></v-app-bar-nav-icon>
 			</template>
 
 			<v-app-bar-title>Zach's World Flags</v-app-bar-title>
 
 			<!-- TODO: settings menu -->
-			<!-- <template v-slot:append>
-				<v-btn icon="mdi-dots-vertical"></v-btn>
-			</template> -->
+			<template v-slot:append>
+				<v-btn
+					icon="mdi-cog-outline"
+					@click.stop="showSettingsDrawer = !showSettingsDrawer"
+					:active="showNavDrawer"
+				></v-btn>
+			</template>
 		</v-app-bar>
 
-		<v-navigation-drawer v-model="drawer" rounded :width="200">
+		<v-navigation-drawer v-model="showNavDrawer" rounded :width="200">
 			<v-list>
 				<v-list-item @click="selectedCountries = []">Clear flags</v-list-item>
 				<v-divider />
@@ -99,6 +112,19 @@ const reorderMode = ref(false)
 					{{ preset.name }}</v-list-item
 				>
 			</v-list>
+		</v-navigation-drawer>
+
+		<v-navigation-drawer
+			v-model="showSettingsDrawer"
+			location="right"
+			temporary
+			rounded
+			:width="280"
+		>
+			<v-toolbar title="Settings"></v-toolbar>
+			<v-container>
+				<v-switch label="Show name tooltips on hover" v-model="showNameTooltips"></v-switch>
+			</v-container>
 		</v-navigation-drawer>
 
 		<v-main>
@@ -134,6 +160,7 @@ const reorderMode = ref(false)
 								:elevation="5"
 								class="d-flex flex-column ma-1"
 								:rounded="0"
+								:max-width="getWidth(index)"
 								hover
 							>
 								<v-img
@@ -144,7 +171,19 @@ const reorderMode = ref(false)
 									:src="`/flags/png1000px/${country.code.toLowerCase()}.png`"
 									:alt="country.name"
 								/>
-								<p class="align-self-center">{{ country.name }}</p>
+								<p
+									:ref="el => (pRefs[index] = el)"
+									class="text-truncate"
+									:class="{ 'align-self-center': !needsTruncate(index) }"
+								>
+									{{ country.name }}
+									<v-tooltip
+										v-if="showNameTooltips"
+										activator="parent"
+										location="bottom"
+										>{{ country.name }}</v-tooltip
+									>
+								</p>
 							</v-card>
 
 							<!-- reorder mode -->
