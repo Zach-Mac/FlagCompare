@@ -1,5 +1,8 @@
-remove url params when empty
+TODO:
 remove typed letters after selection
 reorder photos. draggable chips?
 responsive. flags right under autocomplete, move down when autocomplete open
-header n stuff
+
+country names shorten and add a ... when flag width < cardwidth
+
+go back in history not working with param changes...

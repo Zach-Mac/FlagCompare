@@ -1,4 +1,20 @@
-export const codeToName = {
+interface FlagsPreset {
+	name: string
+	countryCodes: string
+}
+export const SIMILAR_FLAGS_PRESETS: FlagsPreset[] = [
+	{
+		name: 'The British Empire',
+		countryCodes: 'GB-SH-AU-NZ-AI-TC-MS-VG-FK-KY-PN-GS-CK-FJ-TV-BM-IO-NU'
+	},
+	{ name: 'The Middle East', countryCodes: 'YE-EG-IQ-SY-SD-PS-EH-JO-SS-KW-AE' },
+	{ name: 'Blue-Yellow-Red', countryCodes: 'TD-RO-AD-MD' },
+	{ name: 'Red and White Stripes', countryCodes: 'ID-MC-SG-PL' },
+	{ name: 'Northern South America', countryCodes: 'CO-EC-VE' },
+	{ name: 'Red, White and Blue', countryCodes: 'LU-NL-HR-RU-SI-SK-RS' }
+]
+
+export const codeToName: Record<string, string> = {
 	AF: 'Afghanistan',
 	AL: 'Albania',
 	DZ: 'Algeria',
