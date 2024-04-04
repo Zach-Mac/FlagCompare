@@ -90,12 +90,12 @@ function needsTruncate(index: number) {
 
 			<v-app-bar-title>Zach's World Flags</v-app-bar-title>
 
-			<!-- TODO: settings menu -->
+			<!-- settings menu -->
 			<template v-slot:append>
 				<v-btn
 					icon="mdi-cog-outline"
 					@click.stop="showSettingsDrawer = !showSettingsDrawer"
-					:active="showNavDrawer"
+					:active="showSettingsDrawer"
 				></v-btn>
 			</template>
 		</v-app-bar>
