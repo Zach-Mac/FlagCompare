@@ -11,7 +11,7 @@ export const SIMILAR_FLAGS_PRESETS: FlagsPreset[] = [
 	{ name: 'Blue-Yellow-Red', countryCodes: 'TD-RO-AD-MD' },
 	{ name: 'Red and White Stripes', countryCodes: 'ID-MC-SG-PL' },
 	{ name: 'Northern South America', countryCodes: 'CO-EC-VE' },
-	{ name: 'Red, White and Blue', countryCodes: 'LU-NL-HR-RU-SI-SK-RS' }
+	{ name: 'Red, White and Blue', countryCodes: 'LU-NL-PY-HR-RU-SI-SK-RS' }
 ]
 
 export const codeToName: Record<string, string> = {
