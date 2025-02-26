@@ -1,75 +1,32 @@
-# Nuxt 3 Minimal Starter
+# FlagCompare
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Overview
 
-## Setup
+FlagCompare is a Vue project for comparing flags and related data.
 
-Make sure to install the dependencies:
+## Features
+
+-   Side-by-side flag comparison.
+-   Simple UI built with Vue.
+-   Customizable data sets.
+
+## Getting Started
+
+### Using Bun
+
+Install dependencies and start the development server with:
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
 bun install
+bun dev
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+Build for production:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+bun build
 ```
 
-## Production
+## Contributing
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Feel free to open issues or submit pull requests.
